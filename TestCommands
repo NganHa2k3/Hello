@@ -7,8 +7,9 @@ local function onPlayerChatted(message)
         -- Your code for +nom command
     elseif words[1] == "+p" then
         -- Your code for +p command
-        print("The +p command was triggered.")
     else
-        print("Unknown command.")
+        -- Code --
     end  -- Ends the if-elseif-else block
 end  -- Ends the onPlayerChatted function
+
+player.Chatted:Connect(onPlayerChatted)
