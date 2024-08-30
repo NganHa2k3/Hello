@@ -1,3 +1,6 @@
+--- 1 ---
+local player = Players.LocalPlayer
+--- 2 ---
 local function onPlayerChatted(message)
     local words = string.split(message, " ")
     
@@ -11,5 +14,5 @@ local function onPlayerChatted(message)
         -- Code --
     end  -- Ends the if-elseif-else block
 end  -- Ends the onPlayerChatted function
-
+--- 3 ---
 player.Chatted:Connect(onPlayerChatted)
