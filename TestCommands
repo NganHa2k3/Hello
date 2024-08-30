@@ -1,18 +1,24 @@
---- 1 ---
+-- 1
+local Players = game:GetService("Players")
 local player = Players.LocalPlayer
---- 2 ---
+
+-- 2
 local function onPlayerChatted(message)
     local words = string.split(message, " ")
     
-    if words[1] == "+m" then
-        -- Your code for +m command
-    elseif words[1] == "+nom" then
-        -- Your code for +nom command
-    elseif words[1] == "+p" then
-        -- Your code for +p command
-    else
-        -- Code --
-    end  -- Ends the if-elseif-else block
-end  -- Ends the onPlayerChatted function
---- 3 ---
+    if player.Character and player.Character:FindFirstChildOfClass("Humanoid") then
+        local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+
+        if words[1] == "+r" then
+            humanoid.Health = 0
+        elseif words[1] == "+s" then
+            humanoid.WalkSpeed = 200
+        elseif words[1] == "+uns" then
+            humanoid.WalkSpeed = 26
+            -- Add any additional code you need here
+        end
+    end
+end
+
+-- 3
 player.Chatted:Connect(onPlayerChatted)
