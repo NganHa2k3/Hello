@@ -1,0 +1,14 @@
+local function onPlayerChatted(message)
+    local words = string.split(message, " ")
+    
+    if words[1] == "+m" then
+        -- Your code for +m command
+    elseif words[1] == "+nom" then
+        -- Your code for +nom command
+    elseif words[1] == "+p" then
+        -- Your code for +p command
+        print("The +p command was triggered.")
+    else
+        print("Unknown command.")
+    end  -- Ends the if-elseif-else block
+end  -- Ends the onPlayerChatted function
