@@ -1,0 +1,25 @@
+-- 1
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- 2
+local function onPlayerChatted(message)
+    local words = string.split(message, " ")
+    
+    if #words >= 2 and words[1] == "+" then
+        -- Combine all parts of the command after the "+" into a single Lua command
+        local command = table.concat(words, " ", 2)
+        
+        -- Execute the command in a protected call
+        local success, result = pcall(function()
+            loadstring("return " .. command)()
+        end)
+        
+        if not success then
+            print("Error executing command: " .. result)
+        end
+    end
+end
+
+-- 3
+player.Chatted:Connect(onPlayerChatted)
