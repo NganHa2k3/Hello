@@ -1,0 +1,42 @@
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+local camera = game.Workspace.CurrentCamera
+
+-- Function to spectate a random player
+local function spectateRandomPlayer()
+    -- Ensure the local player exists
+    if not localPlayer then
+        warn("Local player not found.")
+        return
+    end
+
+    -- Get all players except the local player
+    local otherPlayers = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= localPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            table.insert(otherPlayers, player)
+        end
+    end
+
+    -- Check if there are any players to spectate
+    if #otherPlayers == 0 then
+        print("No other players to spectate.")
+        return
+    end
+
+    -- Choose a random player
+    local randomPlayer = otherPlayers[math.random(1, #otherPlayers)]
+
+    -- Set the camera to the chosen player's character
+    local character = randomPlayer.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        camera.CameraSubject = character.HumanoidRootPart
+        camera.CameraType = Enum.CameraType.Attach
+        print("Now spectating " .. randomPlayer.Name)
+    else
+        print("Selected player does not have a valid character.")
+    end
+end
+
+-- Call the function to spectate a random player
+spectateRandomPlayer()
