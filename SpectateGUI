@@ -1,0 +1,112 @@
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+local camera = game.Workspace.CurrentCamera
+
+-- Create GUI elements
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "SpectateGui"
+screenGui.Parent = localPlayer:WaitForChild("PlayerGui")
+
+local function createButton(name, text, position)
+    local button = Instance.new("TextButton")
+    button.Name = name
+    button.Text = text
+    button.Size = UDim2.new(0, 100, 0, 50)
+    button.Position = position
+    button.Parent = screenGui
+    return button
+end
+
+local function createLabel(name, position)
+    local label = Instance.new("TextLabel")
+    label.Name = name
+    label.Size = UDim2.new(0, 200, 0, 50)
+    label.Position = position
+    label.Text = "Username"
+    label.TextScaled = true
+    label.BackgroundTransparency = 1
+    label.Parent = screenGui
+    return label
+end
+
+-- Create buttons and label
+local prevButton = createButton("<", "<", UDim2.new(0, 10, 0.5, -25))
+local cancelButton = createButton("x", "x", UDim2.new(0.5, -50, 0.5, -25))
+local nextButton = createButton(">", ">", UDim2.new(1, -110, 0.5, -25))
+local usernameLabel = createLabel("UsernameLabel", UDim2.new(0.5, -100, 0.5, -25))
+
+-- Variables for spectating
+local currentIndex = 0
+local spectatingPlayers = {}
+
+-- Function to update the username label
+local function updateUsernameLabel(player)
+    usernameLabel.Text = player and player.Name or "Username"
+end
+
+-- Function to spectate a specific player
+local function spectatePlayer(player)
+    if not player or not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
+        return
+    end
+
+    camera.CameraSubject = player.Character.HumanoidRootPart
+    camera.CameraType = Enum.CameraType.Attach
+    updateUsernameLabel(player)
+end
+
+-- Function to spectate next player
+local function spectateNextPlayer()
+    if #spectatingPlayers == 0 then
+        return
+    end
+
+    currentIndex = (currentIndex % #spectatingPlayers) + 1
+    spectatePlayer(spectatingPlayers[currentIndex])
+end
+
+-- Function to spectate previous player
+local function spectatePreviousPlayer()
+    if #spectatingPlayers == 0 then
+        return
+    end
+
+    currentIndex = (currentIndex - 2) % #spectatingPlayers + 1
+    spectatePlayer(spectatingPlayers[currentIndex])
+end
+
+-- Function to cancel spectating and return to the local player
+local function cancelSpectating()
+    camera.CameraSubject = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") or nil
+    camera.CameraType = Enum.CameraType.Custom
+    updateUsernameLabel(nil)
+end
+
+-- Populate the list of players to spectate
+local function updateSpectatingPlayers()
+    spectatingPlayers = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= localPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            table.insert(spectatingPlayers, player)
+        end
+    end
+end
+
+-- Initialize
+updateSpectatingPlayers()
+if #spectatingPlayers > 0 then
+    spectateNextPlayer()
+end
+
+-- Connect buttons to functions
+prevButton.MouseButton1Click:Connect(function()
+    spectatePreviousPlayer()
+end)
+
+nextButton.MouseButton1Click:Connect(function()
+    spectateNextPlayer()
+end)
+
+cancelButton.MouseButton1Click:Connect(function()
+    cancelSpectating()
+end)
