@@ -1,0 +1,49 @@
+-- Create a ScreenGui if it does not already exist
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "NewButtonGui"
+screenGui.Parent = game.CoreGui
+
+-- Create a new TextButton with explicit size and position
+local newButton = Instance.new("TextButton")
+newButton.Name = "NewButton"
+newButton.Size = UDim2.new(0.1, 0, 0.1, 0) -- Same size as teleportButton
+newButton.Position = UDim2.new(0.7, 0, 0.4, 0) -- Same position as teleportButton
+newButton.Text = "New Button"
+newButton.Parent = screenGui
+
+-- Apply the same UI styling (e.g., corner radius) as teleportButton
+local uiCorner = Instance.new("UICorner")
+uiCorner.Parent = newButton
+
+-- Set transparency
+newButton.Transparency = 0.8 -- Same transparency as teleportButton
+
+-- Function to play a sound
+local function playSound(soundId)
+    local sound = Instance.new("Sound")
+    sound.SoundId = soundId
+    sound.Parent = game.CoreGui
+    sound:Play()
+    game:GetService("Debris"):AddItem(sound, sound.TimeLength) -- Clean up sound after it plays
+end
+
+-- Function to handle button click
+local function onButtonClick()
+    -- Play sound
+    playSound("rbxassetid://405593386") -- Replace with your specific sound ID
+
+    -- Start countdown and update button text
+    local countdown = 3
+    for i = countdown, 1, -1 do
+        newButton.Text = tostring(i)
+        wait(1)
+    end
+    newButton.Text = "Goodbye!"
+    
+    -- Hide the GUI after countdown
+    wait(1) -- Wait for 1 more second to display "Goodbye!"
+    screenGui:Destroy() -- Remove the ScreenGui and its children
+end
+
+-- Connect the function to the MouseButton1Click event
+newButton.MouseButton1Click:Connect(onButtonClick)
