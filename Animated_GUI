@@ -1,10 +1,12 @@
 -- Services
 local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
 
 -- Create a ScreenGui if it does not already exist
+local player = Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "NewButtonGui"
-screenGui.Parent = game.CoreGui
+screenGui.Parent = player.PlayerGui
 
 -- Create a new TextButton with explicit size and position
 local newButton = Instance.new("TextButton")
@@ -25,14 +27,14 @@ newButton.Transparency = 0.8 -- Same transparency as teleportButton
 local function playSound(soundId)
     local sound = Instance.new("Sound")
     sound.SoundId = soundId
-    sound.Parent = game.CoreGui
+    sound.Parent = player.PlayerGui -- Change to PlayerGui to ensure sound is heard
     sound:Play()
     game:GetService("Debris"):AddItem(sound, sound.TimeLength) -- Clean up sound after it plays
 end
 
 -- Function to animate the GUI
 local function animateAndDestroy()
-    -- Create tween info for shrinking and spinning
+    -- Create tween info for shrinking
     local tweenInfo = TweenInfo.new(
         1, -- Time (duration of the tween)
         Enum.EasingStyle.Sine, -- Easing style
@@ -44,8 +46,7 @@ local function animateAndDestroy()
 
     -- Define the tween goals
     local tweenGoals = {
-        Size = UDim2.new(0, 0, 0, 0), -- Shrink to zero size
-        Rotation = 360 -- Spin
+        Size = UDim2.new(0, 0, 0, 0) -- Shrink to zero size
     }
 
     -- Create and play the tween
@@ -62,7 +63,7 @@ local function onButtonClick()
     local countdown = 3
     for i = countdown, 1, -1 do
         newButton.Text = tostring(i)
-        wait(1)
+        wait(1) -- Adjust as necessary
     end
     
     -- Play sound
