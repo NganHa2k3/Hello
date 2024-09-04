@@ -1,0 +1,81 @@
+-- Services
+local TweenService = game:GetService("TweenService")
+
+-- Create a ScreenGui if it does not already exist
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "NewButtonGui"
+screenGui.Parent = game.CoreGui
+
+-- Create a new TextButton with explicit size and position
+local newButton = Instance.new("TextButton")
+newButton.Name = "NewButton"
+newButton.Size = UDim2.new(0.1, 0, 0.1, 0) -- Same size as teleportButton
+newButton.Position = UDim2.new(0.7, 0, 0.4, 0) -- Same position as teleportButton
+newButton.Text = "New Button"
+newButton.Parent = screenGui
+
+-- Apply the same UI styling (e.g., corner radius) as teleportButton
+local uiCorner = Instance.new("UICorner")
+uiCorner.Parent = newButton
+
+-- Set transparency
+newButton.Transparency = 0.8 -- Same transparency as teleportButton
+
+-- Function to play a sound
+local function playSound(soundId)
+    local sound = Instance.new("Sound")
+    sound.SoundId = soundId
+    sound.Parent = game.CoreGui
+    sound:Play()
+    game:GetService("Debris"):AddItem(sound, sound.TimeLength) -- Clean up sound after it plays
+end
+
+-- Function to animate the GUI
+local function animateAndDestroy()
+    -- Create tween info for shrinking and spinning
+    local tweenInfo = TweenInfo.new(
+        1, -- Time (duration of the tween)
+        Enum.EasingStyle.Sine, -- Easing style
+        Enum.EasingDirection.InOut, -- Easing direction
+        0, -- Number of times to repeat
+        false, -- Reverse the tween
+        0 -- Delay before tween starts
+    )
+
+    -- Define the tween goals
+    local tweenGoals = {
+        Size = UDim2.new(0, 0, 0, 0), -- Shrink to zero size
+        Rotation = 360 -- Spin
+    }
+
+    -- Create and play the tween
+    local tween = TweenService:Create(newButton, tweenInfo, tweenGoals)
+    tween:Play()
+    tween.Completed:Connect(function()
+        screenGui:Destroy() -- Remove the ScreenGui and its children after the animation
+    end)
+end
+
+-- Function to handle button click
+local function onButtonClick()
+    -- Start countdown and update button text
+    local countdown = 3
+    for i = countdown, 1, -1 do
+        newButton.Text = tostring(i)
+        wait(1)
+    end
+    
+    -- Play sound
+    playSound("rbxassetid://405593386") -- Replace with your specific sound ID
+    
+    -- Show "Goodbye!" and then animate the GUI
+    newButton.Text = "Goodbye!"
+    wait(1) -- Wait for 1 more second to display "Goodbye!"
+    -- Script here --
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/Source'))()
+    -- Trigger animation and destruction
+    animateAndDestroy()
+end
+
+-- Connect the function to the MouseButton1Click event
+newButton.MouseButton1Click:Connect(onButtonClick)
