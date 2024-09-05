@@ -1,0 +1,97 @@
+-- Function to create a part with given properties
+local function createLadderPart(size, position, color, parent)
+    local part = Instance.new("Part")
+    part.Size = size
+    part.Position = position
+    part.Anchored = true
+    part.BrickColor = BrickColor.new(color)
+    part.Parent = parent
+    return part
+end
+
+-- Function to create and configure GUI elements
+local function createGui()
+    -- Create the ScreenGui
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "LadderGui"
+    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+    -- Create the TextBox
+    local textBox = Instance.new("TextBox")
+    textBox.Name = "TextBox"
+    textBox.Parent = screenGui
+    textBox.Size = UDim2.new(0, 200, 0, 50)
+    textBox.Position = UDim2.new(0.5, -100, 0.5, -25)
+    textBox.PlaceholderText = "Enter number"
+    textBox.Text = ""
+
+    -- Create the TextButton
+    local button = Instance.new("TextButton")
+    button.Name = "TextButton"
+    button.Parent = screenGui
+    button.Size = UDim2.new(0, 200, 0, 50)
+    button.Position = UDim2.new(0.5, -100, 0.5, 30)
+    button.Text = "Spawn Ladder"
+
+    -- Function to handle button click
+    local function onButtonClick()
+        local numberOfParts = tonumber(textBox.Text)
+        if not numberOfParts or numberOfParts < 1 then
+            warn("Invalid number")
+            return
+        end
+
+        local character = game.Players.LocalPlayer.Character
+        if not character then return end
+        
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+        local forwardVector = humanoidRootPart.CFrame.LookVector
+        local basePosition = humanoidRootPart.Position + forwardVector * 5
+
+        -- Define ladder dimensions and colors
+        local ladderWidth = 3
+        local ladderHeight = 0.5
+        local ladderDepth = 1
+        local rungWidth = 3
+        local rungHeight = 0.5
+        local rungDepth = 0.2
+        local rungSpacing = 2 -- Distance between rungs
+        local ladderColor = "Bright green"
+        local rungColor = "Bright yellow"
+
+        -- Remove existing ladders
+        for _, part in ipairs(workspace:GetChildren()) do
+            if part:IsA("Part") and (part.BrickColor == BrickColor.new(ladderColor) or part.BrickColor == BrickColor.new(rungColor)) then
+                part:Destroy()
+            end
+        end
+
+        -- Create ladder model
+        local ladderModel = Instance.new("Model")
+        ladderModel.Name = "Ladder"
+        ladderModel.Parent = workspace
+
+        -- Create ladder sections
+        for i = 0, numberOfParts - 1 do
+            local baseSectionPosition = basePosition + Vector3.new(0, i * (rungSpacing + rungHeight), 0)
+            
+            -- Create vertical beams for each section
+            createLadderPart(Vector3.new(ladderDepth, rungSpacing, ladderWidth), baseSectionPosition + Vector3.new(-ladderWidth/2, rungSpacing/2, 0), ladderColor, ladderModel) -- Left Beam
+            createLadderPart(Vector3.new(ladderDepth, rungSpacing, ladderWidth), baseSectionPosition + Vector3.new(ladderWidth/2, rungSpacing/2, 0), ladderColor, ladderModel) -- Right Beam
+
+            -- Create rungs with spacing
+            for rungIndex = 0, math.floor(rungSpacing / (rungHeight + 0.1)) - 1 do -- Adjust number of rungs per section
+                local rungY = baseSectionPosition.Y + (rungIndex * (rungHeight + 0.1))
+                local rungPosition = baseSectionPosition + Vector3.new(0, rungY - baseSectionPosition.Y, 0)
+                createLadderPart(Vector3.new(rungWidth, rungHeight, rungDepth), rungPosition + Vector3.new(0, 0, -ladderDepth/2), rungColor, ladderModel) -- Front Rung
+                createLadderPart(Vector3.new(rungWidth, rungHeight, rungDepth), rungPosition + Vector3.new(0, 0, ladderDepth/2), rungColor, ladderModel) -- Back Rung
+            end
+        end
+    end
+
+    -- Connect button click event to handler function
+    button.MouseButton1Click:Connect(onButtonClick)
+end
+
+-- Create GUI when the game starts
+createGui()
