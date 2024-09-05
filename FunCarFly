@@ -1,0 +1,123 @@
+-- Services
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+-- Get the local player
+local player = Players.LocalPlayer
+
+-- Function to remove existing GUI
+local function removeExistingGui()
+    local existingGui = player.PlayerGui:FindFirstChild("FlyingControlGui")
+    if existingGui then
+        existingGui:Destroy()
+    end
+end
+
+-- Remove any existing GUI before creating a new one
+removeExistingGui()
+
+-- Create a ScreenGui if it does not already exist
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "FlyingControlGui"
+screenGui.Parent = player.PlayerGui
+
+-- Create a new TextButton with explicit size and position
+local stopButton = Instance.new("TextButton")
+stopButton.Name = "StopButton"
+stopButton.Size = UDim2.new(0.1, 0, 0.1, 0) -- Size
+stopButton.Position = UDim2.new(0.7, 0, 0.4, 0) -- Position
+stopButton.Text = "Stop Fly"
+stopButton.Parent = screenGui
+
+-- Apply UI styling (e.g., corner radius)
+local uiCorner = Instance.new("UICorner")
+uiCorner.Parent = stopButton
+
+-- Set transparency
+stopButton.Transparency = 0.8 -- Transparency
+
+-- Function to animate the GUI and stop flying
+local function animateAndStopFlying()
+    -- Create tween info for shrinking
+    local tweenInfo = TweenInfo.new(
+        1, -- Time (duration of the tween)
+        Enum.EasingStyle.Sine, -- Easing style
+        Enum.EasingDirection.InOut, -- Easing direction
+        0, -- Number of times to repeat
+        false, -- Reverse the tween
+        0 -- Delay before tween starts
+    )
+
+    -- Define the tween goals
+    local tweenGoals = {
+        Size = UDim2.new(0, 0, 0, 0) -- Shrink to zero size
+    }
+
+    -- Create and play the tween
+    local tween = TweenService:Create(stopButton, tweenInfo, tweenGoals)
+    tween:Play()
+    tween.Completed:Connect(function()
+        screenGui:Destroy() -- Remove the ScreenGui and its children after the animation
+    end)
+
+    -- Stop flying
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:WaitForChild("Humanoid")
+    local rootPart = character:WaitForChild("HumanoidRootPart")
+    
+    humanoid.PlatformStand = false
+    for _, v in pairs(rootPart:GetChildren()) do
+        if v:IsA("BodyGyro") or v:IsA("BodyVelocity") then
+            v:Destroy()
+        end
+    end
+end
+
+-- Function to handle button click
+local function onButtonClick()
+    -- Start countdown and update button text
+    local countdown = 3
+    for i = countdown, 1, -1 do
+        stopButton.Text = tostring(i)
+        wait(1) -- Adjust as necessary
+    end
+
+    -- Show "Stopping Fly" and then animate the GUI
+    stopButton.Text = "Stopping Fly"
+    wait(1) -- Wait for 1 more second to display "Stopping Fly"
+    -- Trigger animation and stop flying
+    animateAndStopFlying()
+end
+
+-- Connect the function to the MouseButton1Click event
+stopButton.MouseButton1Click:Connect(onButtonClick)
+
+-- Function to start flying
+local function startFlying()
+    local character = player.Character or player.CharacterAdded:Wait()
+    local rootPart = character:WaitForChild("HumanoidRootPart")
+
+    -- Create BodyGyro for orientation
+    local bodyGyro = Instance.new("BodyGyro")
+    bodyGyro.Parent = rootPart
+    bodyGyro.MaxTorque = Vector3.new(4000, 4000, 4000)
+    bodyGyro.CFrame = rootPart.CFrame
+
+    -- Create BodyVelocity for movement
+    local bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.Parent = rootPart
+    bodyVelocity.Velocity = rootPart.CFrame.LookVector * 50 -- Speed of flying
+    bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
+
+    -- Continuously update BodyGyro and BodyVelocity
+    RunService.RenderStepped:Connect(function()
+        if bodyGyro and bodyVelocity then
+            bodyGyro.CFrame = rootPart.CFrame
+            bodyVelocity.Velocity = rootPart.CFrame.LookVector * 50 -- Speed of flying
+        end
+    end)
+end
+
+-- Start flying on script execution
+startFlying()
