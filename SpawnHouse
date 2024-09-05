@@ -1,0 +1,114 @@
+-- Function to remove existing GUI
+local function removeExistingGUI()
+    for _, child in ipairs(game.CoreGui:GetChildren()) do
+        if child:IsA("ScreenGui") and child.Name == "HouseGui" then
+            child:Destroy()
+        end
+    end
+end
+
+-- Remove any existing GUI before creating a new one
+removeExistingGUI()
+
+-- Function to create a part with given properties
+local function createPart(size, position, color, parent)
+    local part = Instance.new("Part")
+    part.Size = size
+    part.Position = position
+    part.Anchored = true
+    part.BrickColor = BrickColor.new(color)
+    part.Parent = parent
+    return part
+end
+
+-- Function to create and configure GUI elements
+local function createGui()
+    -- Create the ScreenGui
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "HouseGui"
+    screenGui.Parent = game.CoreGui
+
+    -- Create the Frame
+    local frame = Instance.new("Frame")
+    frame.Parent = screenGui
+    frame.BackgroundColor3 = Color3.new(0, 0, 0)
+    frame.BackgroundTransparency = 0.5
+    frame.BorderColor3 = Color3.new(0, 0, 1)
+    frame.BorderSizePixel = 2
+    frame.Position = UDim2.new(0.7, 0, 0.4, 0)
+    frame.Size = UDim2.new(0.2, 0, 0.3, 0)
+    frame.Active = true
+    frame.Draggable = true
+
+    -- Configure UI Corner for Frame
+    local frameCorner = Instance.new("UICorner")
+    frameCorner.CornerRadius = UDim.new(0.2, 0)
+    frameCorner.Parent = frame
+
+    -- Create the Spawn House Button
+    local button = Instance.new("TextButton")
+    button.Parent = frame
+    button.BackgroundColor3 = Color3.new(0, 1, 0)
+    button.Position = UDim2.new(0.1, 0, 0.1, 0)
+    button.Size = UDim2.new(0.8, 0, 0.8, 0)
+    button.Text = "Spawn House"
+    button.TextColor3 = Color3.new(0, 0, 0)
+    button.Font = Enum.Font.SourceSansLight
+    button.TextScaled = true
+
+    -- Function to handle button click
+    local function onButtonClick()
+        local character = game.Players.LocalPlayer.Character
+        if not character then return end
+        
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+        local forwardVector = humanoidRootPart.CFrame.LookVector
+        local basePosition = humanoidRootPart.Position + forwardVector * 10
+
+        -- Define house dimensions and colors
+        local houseWidth = 10
+        local houseHeight = 8
+        local houseDepth = 10
+        local wallThickness = 1
+        local roofHeight = 5
+        local wallColor = "Bright blue"
+        local roofColor = "Bright red"
+        local floorColor = "Bright green"
+
+        -- Remove existing houses
+        for _, part in ipairs(workspace:GetChildren()) do
+            if part:IsA("Part") and (part.BrickColor == BrickColor.new(wallColor) or part.BrickColor == BrickColor.new(roofColor) or part.BrickColor == BrickColor.new(floorColor)) then
+                part:Destroy()
+            end
+        end
+
+        -- Create house model
+        local houseModel = Instance.new("Model")
+        houseModel.Name = "House"
+        houseModel.Parent = workspace
+
+        -- Create walls
+        createPart(Vector3.new(houseWidth, houseHeight, wallThickness), basePosition + Vector3.new(0, houseHeight / 2, -houseDepth / 2), wallColor, houseModel) -- Front wall
+        createPart(Vector3.new(houseWidth, houseHeight, wallThickness), basePosition + Vector3.new(0, houseHeight / 2, houseDepth / 2), wallColor, houseModel) -- Back wall
+        createPart(Vector3.new(wallThickness, houseHeight, houseDepth), basePosition + Vector3.new(-houseWidth / 2, houseHeight / 2, 0), wallColor, houseModel) -- Left wall
+        createPart(Vector3.new(wallThickness, houseHeight, houseDepth), basePosition + Vector3.new(houseWidth / 2, houseHeight / 2, 0), wallColor, houseModel) -- Right wall
+
+        -- Create roof
+        local roof = Instance.new("WedgePart")
+        roof.Size = Vector3.new(houseWidth + 2, roofHeight, houseDepth + 2)
+        roof.Position = basePosition + Vector3.new(0, houseHeight + roofHeight / 2, 0)
+        roof.Anchored = true
+        roof.BrickColor = BrickColor.new(roofColor)
+        roof.Parent = houseModel
+        roof.CFrame = roof.CFrame * CFrame.Angles(0, math.pi, 0) -- Rotate to form a roof shape
+
+        -- Create floor
+        createPart(Vector3.new(houseWidth, wallThickness, houseDepth), basePosition + Vector3.new(0, -wallThickness / 2, 0), floorColor, houseModel)
+    end
+
+    -- Connect button click event to handler function
+    button.MouseButton1Click:Connect(onButtonClick)
+end
+
+-- Create GUI when the game starts
+createGui()
