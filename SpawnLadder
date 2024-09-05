@@ -1,3 +1,15 @@
+-- Function to remove existing GUI
+local function removeExistingGUI()
+    for _, child in ipairs(game.CoreGui:GetChildren()) do
+        if child:IsA("ScreenGui") and child.Name == "LadderGui" then
+            child:Destroy()
+        end
+    end
+end
+
+-- Remove any existing GUI before creating a new one
+removeExistingGUI()
+
 -- Function to create a part with given properties
 local function createLadderPart(size, position, color, parent)
     local part = Instance.new("Part")
@@ -14,30 +26,60 @@ local function createGui()
     -- Create the ScreenGui
     local screenGui = Instance.new("ScreenGui")
     screenGui.Name = "LadderGui"
-    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    screenGui.Parent = game.CoreGui
 
-    -- Create the TextBox
-    local textBox = Instance.new("TextBox")
-    textBox.Name = "TextBox"
-    textBox.Parent = screenGui
-    textBox.Size = UDim2.new(0, 200, 0, 50)
-    textBox.Position = UDim2.new(0.5, -100, 0.5, -25)
-    textBox.PlaceholderText = "Enter number"
-    textBox.Text = ""
+    -- Create the Frame
+    local frame = Instance.new("Frame")
+    frame.Parent = screenGui
+    frame.BackgroundColor3 = Color3.new(0, 0, 0)
+    frame.BackgroundTransparency = 0.5
+    frame.BorderColor3 = Color3.new(0, 0, 1)
+    frame.BorderSizePixel = 2
+    frame.Position = UDim2.new(0.7, 0, 0.4, 0)
+    frame.Size = UDim2.new(0.2, 0, 0.3, 0)
+    frame.Active = true
+    frame.Draggable = true
 
-    -- Create the TextButton
+    -- Configure UI Corner for Frame
+    local frameCorner = Instance.new("UICorner")
+    frameCorner.CornerRadius = UDim.new(0.2, 0)
+    frameCorner.Parent = frame
+
+    -- Create the Number of Rungs TextBox
+    local rungsTextBox = Instance.new("TextBox")
+    rungsTextBox.Parent = frame
+    rungsTextBox.BackgroundColor3 = Color3.new(1, 1, 1)
+    rungsTextBox.BackgroundTransparency = 0.5
+    rungsTextBox.Position = UDim2.new(0.1, 0, 0.1, 0)
+    rungsTextBox.Size = UDim2.new(0.8, 0, 0.3, 0)
+    rungsTextBox.TextColor3 = Color3.new(0, 0, 0)
+    rungsTextBox.Font = Enum.Font.SourceSansLight
+    rungsTextBox.PlaceholderText = "Enter number of rungs"
+    rungsTextBox.TextScaled = true
+    rungsTextBox.TextSize = 14
+    rungsTextBox.TextWrapped = true
+
+    -- Configure UI Corner for RungsTextBox
+    local rungsBoxCorner = Instance.new("UICorner")
+    rungsBoxCorner.CornerRadius = UDim.new(0.2, 0)
+    rungsBoxCorner.Parent = rungsTextBox
+
+    -- Create the Spawn Ladder Button
     local button = Instance.new("TextButton")
-    button.Name = "TextButton"
-    button.Parent = screenGui
-    button.Size = UDim2.new(0, 200, 0, 50)
-    button.Position = UDim2.new(0.5, -100, 0.5, 30)
+    button.Parent = frame
+    button.BackgroundColor3 = Color3.new(0, 1, 0)
+    button.Position = UDim2.new(0.1, 0, 0.5, 0)
+    button.Size = UDim2.new(0.8, 0, 0.3, 0)
     button.Text = "Spawn Ladder"
+    button.TextColor3 = Color3.new(0, 0, 0)
+    button.Font = Enum.Font.SourceSansLight
+    button.TextScaled = true
 
     -- Function to handle button click
     local function onButtonClick()
-        local numberOfParts = tonumber(textBox.Text)
-        if not numberOfParts or numberOfParts < 1 then
-            warn("Invalid number")
+        local numberOfRungs = tonumber(rungsTextBox.Text)
+        if not numberOfRungs or numberOfRungs < 1 then
+            warn("Invalid number of rungs")
             return
         end
 
@@ -72,7 +114,7 @@ local function createGui()
         ladderModel.Parent = workspace
 
         -- Create ladder sections
-        for i = 0, numberOfParts - 1 do
+        for i = 0, numberOfRungs - 1 do
             local baseSectionPosition = basePosition + Vector3.new(0, i * (rungSpacing + rungHeight), 0)
             
             -- Create vertical beams for each section
