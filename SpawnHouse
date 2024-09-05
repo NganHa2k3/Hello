@@ -74,10 +74,13 @@ local function createGui()
         local wallColor = "Bright blue"
         local roofColor = "Bright red"
         local floorColor = "Bright green"
+        local doorColor = "Bright yellow"
+        local doorWidth = 3
+        local doorHeight = 4
 
         -- Remove existing houses
         for _, part in ipairs(workspace:GetChildren()) do
-            if part:IsA("Part") and (part.BrickColor == BrickColor.new(wallColor) or part.BrickColor == BrickColor.new(roofColor) or part.BrickColor == BrickColor.new(floorColor)) then
+            if part:IsA("Part") and (part.BrickColor == BrickColor.new(wallColor) or part.BrickColor == BrickColor.new(roofColor) or part.BrickColor == BrickColor.new(floorColor) or part.BrickColor == BrickColor.new(doorColor)) then
                 part:Destroy()
             end
         end
@@ -104,6 +107,9 @@ local function createGui()
 
         -- Create floor
         createPart(Vector3.new(houseWidth, wallThickness, houseDepth), basePosition + Vector3.new(0, -wallThickness / 2, 0), floorColor, houseModel)
+
+        -- Create door
+        createPart(Vector3.new(doorWidth, doorHeight, wallThickness + 0.1), basePosition + Vector3.new(0, doorHeight / 2, -houseDepth / 2 + wallThickness / 2), doorColor, houseModel)
     end
 
     -- Connect button click event to handler function
