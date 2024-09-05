@@ -1,0 +1,55 @@
+-- LocalScript placed in StarterPlayerScripts
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+local mouse = player:GetMouse()
+
+-- Function to create a projectile
+local function createProjectile(startPosition, targetPosition)
+    local projectile = Instance.new("Part")
+    projectile.Shape = Enum.PartType.Ball
+    projectile.Size = Vector3.new(1, 1, 1)
+    projectile.Position = startPosition
+    projectile.Anchored = false
+    projectile.CanCollide = false
+    projectile.BrickColor = BrickColor.new("Bright red")
+    projectile.Parent = workspace
+
+    local controlPoint1 = startPosition + (targetPosition - startPosition) * 0.5
+    local controlPoint2 = startPosition + (targetPosition - startPosition) * 0.5
+    controlPoint1 = controlPoint1 + Vector3.new(0, 5, 0)
+    controlPoint2 = controlPoint2 - Vector3.new(0, 5, 0)
+
+    local function moveProjectile()
+        local time = 0
+        local duration = 2
+        
+        while time < duration do
+            time = time + RunService.Heartbeat:Wait()
+            local t = time / duration
+            local point = (1 - t) ^ 3 * startPosition +
+                          3 * (1 - t) ^ 2 * t * controlPoint1 +
+                          3 * (1 - t) * t ^ 2 * controlPoint2 +
+                          t ^ 3 * targetPosition
+
+            projectile.Position = point
+        end
+        
+        projectile:Destroy()
+    end
+
+    moveProjectile()
+end
+
+-- Function to handle mouse click
+local function onMouseClick()
+    local targetPosition = mouse.Hit.Position
+    local startPosition = player.Character.HumanoidRootPart.Position
+    createProjectile(startPosition, targetPosition)
+end
+
+-- Connect mouse click event to the function
+mouse.Button1Down:Connect(onMouseClick)
