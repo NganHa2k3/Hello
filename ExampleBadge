@@ -1,0 +1,9 @@
+local CoreGui = game:GetService("StarterGui")
+CoreGui:SetCore("SendNotification", {
+    Title = "Conguralution!",
+    Text = "You Have Been Reset",
+    Duration = 2,
+})
+
+
+-- Just a example script to do notification
