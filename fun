@@ -2,6 +2,12 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local localPlayer = Players.LocalPlayer
 
+-- Ensure LocalPlayer and their HumanoidRootPart are available
+if not localPlayer or not localPlayer.Character or not localPlayer.Character:FindFirstChild("HumanoidRootPart") then
+    print("LocalPlayer or their HumanoidRootPart is not available.")
+    return
+end
+
 -- Find the nearest player
 local function getNearestPlayer()
     local nearestPlayer = nil
@@ -18,14 +24,22 @@ local function getNearestPlayer()
     return nearestPlayer
 end
 
-local nearestPlayer = getNearestPlayer()
+-- Function to send a chat message
+local function sendChatMessage(player)
+    local chatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+    if chatEvent and chatEvent:FindFirstChild("SayMessageRequest") then
+        local message = player.Name .. "are G@Y !"
+        local args = { message, "All" } -- Message first, then channel
+        chatEvent.SayMessageRequest:FireServer(unpack(args))
+    else
+        print("Chat event or SayMessageRequest not found.")
+    end
+end
 
+-- Execute once when the script runs
+local nearestPlayer = getNearestPlayer()
 if nearestPlayer then
-    local args = {
-        [1] = "All",
-        [2] = nearestPlayer.Name .. "!"
-    }
-    ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(unpack(args))
+    sendChatMessage(nearestPlayer)
 else
     print("No nearest player found.")
 end
