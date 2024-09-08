@@ -23,7 +23,7 @@ local nearestPlayer = getNearestPlayer()
 if nearestPlayer then
     local args = {
         [1] = "All",
-        [2] = nearestPlayer.Name .. " ⒶⓇⒺ  ⒼⒶⓎ !"
+        [2] = nearestPlayer.Name .. " are G@Y!"
     }
     ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(unpack(args))
 else
