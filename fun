@@ -28,7 +28,7 @@ end
 local function sendChatMessage(player)
     local chatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
     if chatEvent and chatEvent:FindFirstChild("SayMessageRequest") then
-        local message = player.Name .. "are G@Y !"
+        local message = player.Name .. " are G4Y !"
         local args = { message, "All" } -- Message first, then channel
         chatEvent.SayMessageRequest:FireServer(unpack(args))
     else
