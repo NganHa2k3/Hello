@@ -1,0 +1,9 @@
+game.Players.LocalPlayer.Character.Humanoid.Health = 0
+
+local CoreGui = game:GetService("StarterGui")
+
+CoreGui:SetCore("SendNotification", {
+    Title = "Conguralution !",
+    Text = "You Have Been Reset",
+    Duration = 2,
+})
