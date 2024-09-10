@@ -1,0 +1,549 @@
+-- Create UI elements
+local ScreenGui = Instance.new("ScreenGui")
+local ScrollingFrame = Instance.new("ScrollingFrame")
+local ToggleButton = Instance.new("TextButton")
+
+local ScrollingEmote = Instance.new("ScrollingFrame")
+local ScrollingAnims = Instance.new("ScrollingFrame")
+
+-- Create and configure TweenService
+local TweenService = game:GetService("TweenService")
+local tweenSpeed = 1  -- Duration in seconds
+local tweenInfo = TweenInfo.new(tweenSpeed, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+
+-- Setup ScreenGui
+ScreenGui.Parent = game.CoreGui
+
+-- Setup ScrollingFrame
+ScrollingFrame.Parent = ScreenGui
+ScrollingFrame.Size = UDim2.new(0.4, 0, 0.1, 0)  -- Adjusted to a more visible size
+ScrollingFrame.Position = UDim2.new(0.27, 0, -0.22, 0)  -- Positioned in the center of the screen
+ScrollingFrame.BackgroundColor3 = Color3.new(0, 0, 0)
+ScrollingFrame.BackgroundTransparency = 0.5
+ScrollingFrame.CanvasSize = UDim2.new(2, 0, 0, 0)  -- Wider canvas size to enable scrolling
+ScrollingFrame.ScrollBarThickness = 0.1
+
+local ScrollingFrameCorner = Instance.new("UICorner")
+ScrollingFrameCorner.Parent = ScrollingFrame
+ScrollingFrameCorner.CornerRadius = UDim.new(0, 10)
+
+-- Setup ToggleButton
+ToggleButton.Parent = ScreenGui
+ToggleButton.BackgroundColor3 = Color3.new(0, 0, 0)
+ToggleButton.BackgroundTransparency = 0.5
+ToggleButton.Size = UDim2.new(0.05, 0, 0.1, 0)  -- Adjusted size for better visibility
+ToggleButton.TextScaled = true
+ToggleButton.Position = UDim2.new(0.8, 0, -0.1, 0)  -- Positioned outside the ScrollingFrame
+ToggleButton.TextColor3 = Color3.new(1, 1, 1)
+ToggleButton.Font = Enum.Font.PatrickHand
+ToggleButton.Text = "+"
+
+local ToggleButtonCorner = Instance.new("UICorner")
+ToggleButtonCorner.Parent = ToggleButton
+ToggleButtonCorner.CornerRadius = UDim.new(0, 10)
+
+-- Button --
+
+local button1 = Instance.new("TextButton")
+button1.Parent = ScrollingFrame
+button1.BackgroundColor3 = Color3.new(0, 0, 0)
+button1.BackgroundTransparency = 0.5
+button1.Size = UDim2.new(0.03, 0, 0.9, 0)  -- Adjusted size for better visibility
+button1.TextScaled = true
+button1.Position = UDim2.new(0.01, 0, 0, 0)  -- Positioned inside the ScrollingFrame
+button1.TextColor3 = Color3.new(1, 1, 1)
+button1.Font = Enum.Font.PatrickHand
+button1.Text = "Emote"
+
+local Button1Corner = Instance.new("UICorner")
+Button1Corner.Parent = button1
+Button1Corner.CornerRadius = UDim.new(0, 10)
+
+-- 1 --
+
+local button2 = Instance.new("TextButton")
+button2.Parent = ScrollingFrame
+button2.BackgroundColor3 = Color3.new(0, 0, 0)
+button2.BackgroundTransparency = 0.5
+button2.Size = UDim2.new(0.03, 0, 0.9, 0)  -- Adjusted size for better visibility
+button2.TextScaled = true
+button2.Position = UDim2.new(0.06, 0, 0, 0)  -- Positioned inside the ScrollingFrame
+button2.TextColor3 = Color3.new(1, 1, 1)
+button2.Font = Enum.Font.PatrickHand
+button2.Text = "Animations"
+
+local Button2Corner = Instance.new("UICorner")
+Button2Corner.Parent = button2
+Button2Corner.CornerRadius = UDim.new(0, 10)
+
+-- 2 --
+
+-- Scrolling Box --
+
+ScrollingEmote.Parent = ScreenGui
+ScrollingEmote.Size = UDim2.new(0.1, 0, 0.2, 0)  -- Adjusted to a more visible size
+ScrollingEmote.Position = UDim2.new(-1, 0, 0.2, 0)  -- Positioned in the center of the screen
+ScrollingEmote.BackgroundColor3 = Color3.new(0, 0, 0)
+ScrollingEmote.BackgroundTransparency = 0.5
+ScrollingEmote.CanvasSize = UDim2.new(0, 0, 2, 0)  -- Wider canvas size to enable scrolling
+ScrollingEmote.ScrollBarThickness = 0.1
+
+local EmoteCorner = Instance.new("UICorner")
+EmoteCorner.Parent = ScrollingEmote
+EmoteCorner.CornerRadius = UDim.new(0, 10)
+
+local goalPosition3 = UDim2.new(0, 0, 0.2, 0)  -- Move ScrollingFrame down
+local goalPosition4 = UDim2.new(-1, 0, 0.2, 0)  -- Original position
+
+local tween3 = TweenService:Create(ScrollingEmote, tweenInfo, {Position = goalPosition3})
+local tween4 = TweenService:Create(ScrollingEmote, tweenInfo, {Position = goalPosition4})
+
+local isToggled1 = false
+button1.MouseButton1Click:Connect(function()
+    if isToggled1 then
+        tween4:Play()
+    else
+        tween3:Play()
+    end
+    isToggled1 = not isToggled1
+end)
+
+-- 1 --
+
+ScrollingAnims.Parent = ScreenGui
+ScrollingAnims.Size = UDim2.new(0.1, 0, 0.2, 0)  -- Adjusted to a more visible size
+ScrollingAnims.Position = UDim2.new(-1, 0, 0.2, 0)  -- Positioned in the center of the screen
+ScrollingAnims.BackgroundColor3 = Color3.new(0, 0, 0)
+ScrollingAnims.BackgroundTransparency = 0.5
+ScrollingAnims.CanvasSize = UDim2.new(0, 0, 2, 0)  -- Wider canvas size to enable scrolling
+ScrollingAnims.ScrollBarThickness = 0.1
+
+local AnimsCorner = Instance.new("UICorner")
+AnimsCorner.Parent = ScrollingAnims
+AnimsCorner.CornerRadius = UDim.new(0, 10)
+
+local goalPosition5 = UDim2.new(0.1, 0, 0.2, 0)  -- Move ScrollingFrame down
+local goalPosition6 = UDim2.new(-1, 0, 0.2, 0)  -- Original position
+
+local tween5 = TweenService:Create(ScrollingAnims, tweenInfo, {Position = goalPosition5})
+local tween6 = TweenService:Create(ScrollingAnims, tweenInfo, {Position = goalPosition6})
+
+local isToggled1 = false
+button2.MouseButton1Click:Connect(function()
+    if isToggled1 then
+        tween6:Play()
+    else
+        tween5:Play()
+    end
+    isToggled1 = not isToggled1
+end)
+
+-- 2 --
+
+-- End --
+
+-- Define tween goals
+local goalPosition1 = UDim2.new(0.27, 0, -0.1, 0)  -- Move ScrollingFrame down
+local goalPosition2 = UDim2.new(0.27, 0, -0.22, 0)  -- Original position
+
+-- Create tweens
+local tween1 = TweenService:Create(ScrollingFrame, tweenInfo, {Position = goalPosition1})
+local tween2 = TweenService:Create(ScrollingFrame, tweenInfo, {Position = goalPosition2})
+
+-- Toggle button behavior
+local isToggled = false
+ToggleButton.MouseButton1Click:Connect(function()
+    if isToggled then
+        tween2:Play()
+    else
+        tween1:Play()
+    end
+    isToggled = not isToggled
+end)
+
+-- Data Storage of Emote Box --
+
+-- Animation and Sound IDs
+local animationIds = {
+    ["Teleport"] = "rbxassetid://15957361339",
+    ["Anim1"] = "rbxassetid://17861841334",
+    ["Anim2"] = "rbxassetid://17863041811",
+    ["Anim3"] = "rbxassetid://15090032390",
+    ["Anim4"] = "rbxassetid://17097409396",
+    ["Anim5"] = "rbxassetid://15503060948",
+    ["Anim6"] = "rbxassetid://12345678",
+    ["Anim7"] = "rbxassetid://12345678",
+    ["Anim8"] = "rbxassetid://12772543293",
+    ["Anim9"] = "rbxassetid://15391323441",
+    ["Anim10"] = "rbxassetid://12345678",
+    ["Anim11"] = "rbxassetid://12345678",
+    ["Anim12"] = "rbxassetid://12345678"
+}
+
+local soundIds = {
+    ["Teleport"] = "rbxassetid://405593386",
+    ["Emote"] = "rbxassetid://12345678",
+    ["Anim1"] = "rbxassetid://9044612350",
+    ["Anim2"] = "rbxassetid://12345678",
+    ["Anim3"] = "rbxassetid://8964762256",
+    ["Anim4"] = "rbxassetid://12345678",
+    ["Anim5"] = "rbxassetid://1837301393",
+    ["Anim6"] = "rbxassetid://12345678",
+    ["Anim7"] = "rbxassetid://12345678",
+    ["Anim8"] = "rbxassetid://13059564956",
+    ["Anim9"] = "rbxassetid://15806232934",
+    ["Anim10"] = "rbxassetid://12345678",
+    ["Anim11"] = "rbxassetid://12345678",
+    ["Anim12"] = "rbxassetid://12345678"
+}
+
+-- Function to stop all existing animations
+local function stopAllAnimations(humanoid)
+    for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
+        track:Stop()
+    end
+end
+
+-- Function to stop all existing sounds
+local function stopAllSounds(character)
+    for _, child in ipairs(character:GetChildren()) do
+        if child:IsA("Sound") then
+            child:Stop()
+            child:Destroy()
+        end
+    end
+end
+
+-- Function to play an animation by name
+local function playAnimation(name)
+    local animationId = animationIds[name]
+    if not animationId then
+        warn("Animation ID for '" .. name .. "' not found")
+        return
+    end
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+    if humanoid then
+        -- Stop all currently playing animations
+        stopAllAnimations(humanoid)
+        
+        -- Load and play the new animation
+        local animation = Instance.new("Animation")
+        animation.AnimationId = animationId
+        local animationTrack = humanoid:LoadAnimation(animation)
+        animationTrack:Play()
+    else
+        warn("Humanoid not found in character")
+    end
+end
+
+-- Function to play a sound by name
+local function playSound(name)
+    local soundId = soundIds[name]
+    if not soundId then
+        warn("Sound ID for '" .. name .. "' not found")
+        return
+    end
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    -- Stop all currently playing sounds
+    stopAllSounds(character)
+
+    -- Create and play the new sound
+    local sound = Instance.new("Sound")
+    sound.SoundId = soundId
+    sound.Parent = character
+    sound:Play()
+
+    -- Clean up after sound finishes
+    sound.Ended:Connect(function()
+        sound:Destroy()
+    end)
+end
+
+-- Emote box --
+
+local emote1 = Instance.new("TextButton")
+emote1.Parent = ScrollingEmote
+emote1.BackgroundColor3 = Color3.new(0, 0, 0)
+emote1.BackgroundTransparency = 0.5
+emote1.Size = UDim2.new(0.8, 0, 0.05, 0)  -- Adjusted size for better visibility
+emote1.TextScaled = true
+emote1.Position = UDim2.new(0.1, 0, 0.01, 0)  -- Positioned inside the ScrollingFrame
+emote1.TextColor3 = Color3.new(1, 1, 1)
+emote1.Font = Enum.Font.PatrickHand
+emote1.Text = "Bunny Dance"
+
+emote1.MouseButton1Click:Connect(function()
+    playAnimation("Anim1")
+    playSound("Anim1")
+end)
+
+local emote2 = Instance.new("TextButton")
+emote2.Parent = ScrollingEmote
+emote2.BackgroundColor3 = Color3.new(0, 0, 0)
+emote2.BackgroundTransparency = 0.5
+emote2.Size = UDim2.new(0.8, 0, 0.05, 0)  -- Adjusted size for better visibility
+emote2.TextScaled = true
+emote2.Position = UDim2.new(0.1, 0, 0.08, 0)  -- Positioned inside the ScrollingFrame
+emote2.TextColor3 = Color3.new(1, 1, 1)
+emote2.Font = Enum.Font.PatrickHand
+emote2.Text = "Pixel Dance"
+
+emote2.MouseButton1Click:Connect(function()
+    playAnimation("Anim2")
+    playSound("Anim2")
+end)
+
+local emote3 = Instance.new("TextButton")
+emote3.Parent = ScrollingEmote
+emote3.BackgroundColor3 = Color3.new(0, 0, 0)
+emote3.BackgroundTransparency = 0.5
+emote3.Size = UDim2.new(0.8, 0, 0.05, 0)  -- Adjusted size for better visibility
+emote3.TextScaled = true
+emote3.Position = UDim2.new(0.1, 0, 0.15, 0)  -- Positioned inside the ScrollingFrame
+emote3.TextColor3 = Color3.new(1, 1, 1)
+emote3.Font = Enum.Font.PatrickHand
+emote3.Text = "Breakdance"
+
+emote3.MouseButton1Click:Connect(function()
+    playAnimation("Anim3")
+    playSound("Anim3")
+end)
+
+local emote4 = Instance.new("TextButton")
+emote4.Parent = ScrollingEmote
+emote4.BackgroundColor3 = Color3.new(0, 0, 0)
+emote4.BackgroundTransparency = 0.5
+emote4.Size = UDim2.new(0.8, 0, 0.05, 0)  -- Adjusted size for better visibility
+emote4.TextScaled = true
+emote4.Position = UDim2.new(0.1, 0, 0.22, 0)  -- Positioned inside the ScrollingFrame
+emote4.TextColor3 = Color3.new(1, 1, 1)
+emote4.Font = Enum.Font.PatrickHand
+emote4.Text = "Nika: Luffy"
+
+emote4.MouseButton1Click:Connect(function()
+    playAnimation("Anim4")
+    playSound("Anim4")
+end)
+
+local emote5 = Instance.new("TextButton")
+emote5.Parent = ScrollingEmote
+emote5.BackgroundColor3 = Color3.new(0, 0, 0)
+emote5.BackgroundTransparency = 0.5
+emote5.Size = UDim2.new(0.8, 0, 0.05, 0)  -- Adjusted size for better visibility
+emote5.TextScaled = true
+emote5.Position = UDim2.new(0.1, 0, 0.29, 0)  -- Positioned inside the ScrollingFrame
+emote5.TextColor3 = Color3.new(1, 1, 1)
+emote5.Font = Enum.Font.PatrickHand
+emote5.Text = "Heaven Feels"
+
+emote5.MouseButton1Click:Connect(function()
+    playAnimation("Anim5")
+    playSound("Anim5")
+end)
+
+local emote6 = Instance.new("TextButton")
+emote6.Parent = ScrollingEmote
+emote6.BackgroundColor3 = Color3.new(0, 0, 0)
+emote6.BackgroundTransparency = 0.5
+emote6.Size = UDim2.new(0.8, 0, 0.05, 0)  -- Adjusted size for better visibility
+emote6.TextScaled = true
+emote6.Position = UDim2.new(0.1, 0, 0.36, 0)  -- Positioned inside the ScrollingFrame
+emote6.TextColor3 = Color3.new(1, 1, 1)
+emote6.Font = Enum.Font.PatrickHand
+emote6.Text = "Unknown Name"
+
+emote6.MouseButton1Click:Connect(function()
+    print("hi")
+end)
+
+local emote7 = Instance.new("TextButton")
+emote7.Parent = ScrollingEmote
+emote7.BackgroundColor3 = Color3.new(0, 0, 0)
+emote7.BackgroundTransparency = 0.5
+emote7.Size = UDim2.new(0.8, 0, 0.05, 0)  -- Adjusted size for better visibility
+emote7.TextScaled = true
+emote7.Position = UDim2.new(0.1, 0, 0.43, 0)  -- Positioned inside the ScrollingFrame
+emote7.TextColor3 = Color3.new(1, 1, 1)
+emote7.Font = Enum.Font.PatrickHand
+emote7.Text = "Unknown Name"
+
+emote7.MouseButton1Click:Connect(function()
+    print("hi")
+end)
+
+local emote8 = Instance.new("TextButton")
+emote8.Parent = ScrollingEmote
+emote8.BackgroundColor3 = Color3.new(0, 0, 0)
+emote8.BackgroundTransparency = 0.5
+emote8.Size = UDim2.new(0.8, 0, 0.05, 0)  -- Adjusted size for better visibility
+emote8.TextScaled = true
+emote8.Position = UDim2.new(0.1, 0, 0.5, 0)  -- Positioned inside the ScrollingFrame
+emote8.TextColor3 = Color3.new(1, 1, 1)
+emote8.Font = Enum.Font.PatrickHand
+emote8.Text = "Unknown Name"
+
+emote8.MouseButton1Click:Connect(function()
+    print("hi")
+end)
+
+local emote9 = Instance.new("TextButton")
+emote9.Parent = ScrollingEmote
+emote9.BackgroundColor3 = Color3.new(0, 0, 0)
+emote9.BackgroundTransparency = 0.5
+emote9.Size = UDim2.new(0.8, 0, 0.05, 0)  -- Adjusted size for better visibility
+emote9.TextScaled = true
+emote9.Position = UDim2.new(0.1, 0, 0.57, 0)  -- Positioned inside the ScrollingFrame
+emote9.TextColor3 = Color3.new(1, 1, 1)
+emote9.Font = Enum.Font.PatrickHand
+emote9.Text = "Unknown Name"
+
+emote9.MouseButton1Click:Connect(function()
+    print("hi")
+end)
+
+local emote10 = Instance.new("TextButton")
+emote10.Parent = ScrollingEmote
+emote10.BackgroundColor3 = Color3.new(0, 0, 0)
+emote10.BackgroundTransparency = 0.5
+emote10.Size = UDim2.new(0.8, 0, 0.05, 0)  -- Adjusted size for better visibility
+emote10.TextScaled = true
+emote10.Position = UDim2.new(0.1, 0, 0.64, 0)  -- Positioned inside the ScrollingFrame
+emote10.TextColor3 = Color3.new(1, 1, 1)
+emote10.Font = Enum.Font.PatrickHand
+emote10.Text = "Unknown Name"
+
+emote10.MouseButton1Click:Connect(function()
+    print("hi")
+end)
+
+-- End of Emote Box --
+
+
+
+
+-- Data Storage of Anims Box --
+
+-- Animation and Sound IDs
+local animationIds = {
+    ["Anims1"] = "rbxassetid://15391323441",
+    ["Anims2"] = "rbxassetid://17863041811",
+    ["Anims3"] = "rbxassetid://15090032390",
+    ["Anims4"] = "rbxassetid://17097409396",
+    ["Anims5"] = "rbxassetid://15503060948",
+    ["Anims6"] = "rbxassetid://12345678",
+    ["Anims7"] = "rbxassetid://12345678",
+    ["Anims8"] = "rbxassetid://12772543293",
+    ["Anims9"] = "rbxassetid://12345678",
+    ["Anims10"] = "rbxassetid://12345678",
+    ["Anims11"] = "rbxassetid://12345678",
+    ["Anims12"] = "rbxassetid://12345678"
+}
+
+local soundIds = {
+    ["Anims1"] = "rbxassetid://15806232934",
+    ["Anims2"] = "rbxassetid://12345678",
+    ["Anims3"] = "rbxassetid://8964762256",
+    ["Anims4"] = "rbxassetid://12345678",
+    ["Anims5"] = "rbxassetid://1837301393",
+    ["Anims6"] = "rbxassetid://12345678",
+    ["Anims7"] = "rbxassetid://12345678",
+    ["Anims8"] = "rbxassetid://13059564956",
+    ["Anims9"] = "rbxassetid://12345678",
+    ["Anims10"] = "rbxassetid://12345678",
+    ["Anims11"] = "rbxassetid://12345678",
+    ["Anims12"] = "rbxassetid://12345678"
+}
+
+-- Function to stop all existing animations
+local function stopAllAnimations(humanoid)
+    for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
+        track:Stop()
+    end
+end
+
+-- Function to stop all existing sounds
+local function stopAllSounds(character)
+    for _, child in ipairs(character:GetChildren()) do
+        if child:IsA("Sound") then
+            child:Stop()
+            child:Destroy()
+        end
+    end
+end
+
+-- Function to play an animation by name
+local function playAnimation(name)
+    local animationId = animationIds[name]
+    if not animationId then
+        warn("Animation ID for '" .. name .. "' not found")
+        return
+    end
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+
+    if humanoid then
+        -- Stop all currently playing animations
+        stopAllAnimations(humanoid)
+        
+        -- Load and play the new animation
+        local animation = Instance.new("Animation")
+        animation.AnimationId = animationId
+        local animationTrack = humanoid:LoadAnimation(animation)
+        animationTrack:Play()
+    else
+        warn("Humanoid not found in character")
+    end
+end
+
+-- Function to play a sound by name
+local function playSound(name)
+    local soundId = soundIds[name]
+    if not soundId then
+        warn("Sound ID for '" .. name .. "' not found")
+        return
+    end
+
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+
+    -- Stop all currently playing sounds
+    stopAllSounds(character)
+
+    -- Create and play the new sound
+    local sound = Instance.new("Sound")
+    sound.SoundId = soundId
+    sound.Parent = character
+    sound:Play()
+
+    -- Clean up after sound finishes
+    sound.Ended:Connect(function()
+        sound:Destroy()
+    end)
+end
+
+-- Animation Box --
+
+local Anima1 = Instance.new("TextButton")
+Anima1.Parent = ScrollingAnims
+Anima1.BackgroundColor3 = Color3.new(0, 0, 0)
+Anima1.BackgroundTransparency = 0.5
+Anima1.Size = UDim2.new(0.8, 0, 0.05, 0)  -- Adjusted size for better visibility
+Anima1.TextScaled = true
+Anima1.Position = UDim2.new(0.1, 0, 0.01, 0)  -- Positioned inside the ScrollingFrame
+Anima1.TextColor3 = Color3.new(1, 1, 1)
+Anima1.Font = Enum.Font.PatrickHand
+Anima1.Text = "Atomic Samurai: Awakening"
+
+Anima1.MouseButton1Click:Connect(function()
+    playAnimation("Anims1")
+    playSound("Anims1")
+end)
