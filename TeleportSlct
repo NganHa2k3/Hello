@@ -1,0 +1,70 @@
+local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
+
+-- Create ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = CoreGui
+
+-- Create ScrollingFrame
+local scrollingFrame = Instance.new("ScrollingFrame")
+scrollingFrame.Size = UDim2.new(0.3, 0, 0.2, 0)
+scrollingFrame.Position = UDim2.new(0.1, 0, 0.3, 0)
+scrollingFrame.Parent = screenGui
+scrollingFrame.CanvasSize = UDim2.new(0, 0, 5, 0)
+scrollingFrame.ScrollBarThickness = 10
+
+-- Create UIListLayout for buttons
+local uiListLayout = Instance.new("UIListLayout")
+uiListLayout.Parent = scrollingFrame
+
+-- Function to create a button for each player
+local function createPlayerButton(playerName)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, 0, 0, 50)
+    button.Text = playerName
+    button.Parent = scrollingFrame
+
+    button.MouseButton1Click:Connect(function()
+        local targetPlayer = Players:FindFirstChild(playerName)
+        if targetPlayer and targetPlayer.Character then
+            local character = targetPlayer.Character
+            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+            if humanoidRootPart then
+                local localPlayer = Players.LocalPlayer
+                localPlayer.Character:MoveTo(humanoidRootPart.Position)
+            end
+        end
+    end)
+end
+
+-- Function to update player buttons
+local function updatePlayerButtons()
+    -- Clear existing buttons, excluding the update button
+    for _, child in ipairs(scrollingFrame:GetChildren()) do
+        if child:IsA("TextButton") and child.Text ~= "Update Existing Players" then
+            child:Destroy()
+        end
+    end
+
+    -- Create buttons for each player if the player count is 12 or more
+    if #Players:GetPlayers() >= 12 then
+        for _, player in ipairs(Players:GetPlayers()) do
+            createPlayerButton(player.Name)
+        end
+    end
+end
+
+-- Create Update button
+local updateButton = Instance.new("TextButton")
+updateButton.Size = UDim2.new(1, 0, 0, 50)
+updateButton.Text = "Update Existing Players"
+updateButton.Parent = scrollingFrame
+updateButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0) -- Green color
+updateButton.MouseButton1Click:Connect(updatePlayerButtons)
+
+-- Connect player added and removed events
+Players.PlayerAdded:Connect(updatePlayerButtons)
+Players.PlayerRemoving:Connect(updatePlayerButtons)
+
+-- Initial button setup
+updatePlayerButtons()
