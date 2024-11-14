@@ -1,0 +1,11 @@
+game:IsLoaded()
+task.wait(0.01)
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/NganHa2k3/Hello/refs/heads/GameScript/KL_Combo_Tool_Test_1"))()
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+player.CharacterAdded:Connect(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/NganHa2k3/Hello/refs/heads/GameScript/KL_Combo_Tool_Test_1"))()
+end)
