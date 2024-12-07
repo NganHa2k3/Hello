@@ -1,0 +1,11 @@
+local TeleportService = game:GetService("TeleportService")
+
+_G.ToGAMES = function(gameId)
+    if not gameId or type(gameId) ~= "string" or not tonumber(gameId) then
+        warn("Invalid Game ID provided!")
+        return
+    end
+
+    local gameIdNumber = tonumber(gameId)
+    TeleportService:Teleport(gameIdNumber)
+end
