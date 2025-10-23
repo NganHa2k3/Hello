@@ -1,0 +1,65 @@
+-- Aimbot Skill Test --
+local plr = game:GetService("Players").LocalPlayer
+local enemies = game:GetService("Workspace").Enemies
+local combolist, speciallist = {
+    "custom combo a" = {
+        "melee" = {"X", "Z"},
+        "_wait" = 0.01,
+        "sword" = {"X", "Z"},
+        "_wait" = 0.01,
+        "flash_step" = {"bind"},
+        "_wait" = 0.01,
+        "melee" = {"C"},
+        "_wait" = 0.01
+    }
+}, {
+    "Buddy Sword"
+}
+
+function _GetTARGET()
+    local IS_TARGET, D1, D2 = nil, math.huge, 1000
+    for _, TARGET in pairs(enemies:GetChildren()) do
+        if TARGET:IsA("Model") and TARGET:FindFirstChild("Humanoid") and TARGET:FindFirstChild("HumanoidRootPart") then
+            if TARGET.Humanoid.Health > 0 then
+                local R1 = (TARGET.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).magnitude
+                if R1 < D1 and R1 <= D2 then D1 = R1
+                    IS_TARGET = TARGET
+                end
+            end
+        end
+    end if IS_TARGET then return IS_TARGET.HumanoidRootPart end
+    return plr.Character.HumanoidRootPart
+end
+
+function update_pos(int, _wait, pos, remote) for i = 1, int do plr.Character:FindFirstChild(remote).RemoteEvent:FireServer(pos) task.wait(_wait) end end
+function run_skill(move, pos, remote) plr.Character:WaitForChild("Humanoid"):FindFirstChild(remote):InvokeServer(move, pos) end
+function _instantly_run(skill, remote_func)
+    local TARGET = _GetTARGET()
+    if TARGET then
+        local Eight = Vector3.new(TARGET.Position.X, TARGET.Position.Y, TARGET.Position.Z)
+        update_pos(1, 0.01, true, remote_func)
+        update_pos(5, 0.2, Eight, remote_func)
+        run_skill(skill, 0.02, Eight, remote_func)
+        update_pos(15, 0.2, Eight, remote_func)
+        update_pos(1, 0.01, false, remote_func)
+    end
+end
+
+if plr.Character then
+    task.spawn(function()
+        local character = plr.Character
+        local hmo = character:WaitForChild("Humanoid")
+        hmo.ChildAdded:Connect(function(new_rf)
+            if new_rf:IsA("RemoteFunction") and tostring(new_rf.Name) == "" then
+                local weapon_located = character:FindFirstChildOfClass("Tool")
+                if weapon_located then new_rf.Name = tostring(weapon_located.Name)
+                    weapon_located.Equipped:Connect(function()
+                        if table.find(speciallist, tostring(weapon_located.Name)) then
+                            _instantly_run("Z", tostring(weapon_located.Name))
+                        end _instantly_run("X", tostring(weapon_located.Name))
+                    end)
+                end
+            end
+        end)
+    end)
+end
